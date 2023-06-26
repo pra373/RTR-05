@@ -94,14 +94,20 @@ int main(void)
 		}
 		else
 		{
-			printf("Invalid character %c entered for division", PLP_OPTION_DIVISION);
+			printf("Invalid character %c entered for division !!! Please try Again ...\n\n", PLP_OPTION_DIVISION);
 
 		}
 
 
 
 	}
-	printf("Invalid Character %c Entered Please try again...\n\n", PLP_OPTION);
+	else
+	{
+		printf("Invalid Character %c Entered Please try again...\n\n", PLP_OPTION);
+	}
+
+	printf("If - else if - else ladder Complete !!!\n");
+	
 	return(0);
 
 
