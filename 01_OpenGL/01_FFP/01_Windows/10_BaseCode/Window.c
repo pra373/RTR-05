@@ -1,0 +1,385 @@
+//Windows header files
+
+#include<windows.h>
+#include<stdio.h>              // for file I/O
+#include<stdlib.h>             // for exit()
+
+#include "window.h"            // Header file in same directory
+
+//Macros
+
+#define WIN_WIDTH 800
+#define WIN_HEIGHT 600
+
+// Global Function declarations
+
+LRESULT CALLBACK WndProc(HWND, UINT, WPARAM, LPARAM);
+
+//global variable declarations
+
+FILE *gpFile = NULL;           // (gpFile) global pointer to a file
+
+HWND ghwnd = NULL;             // handle of window
+BOOL gbActive = FALSE;
+DWORD dwStyle = 0;
+WINDOWPLACEMENT wpPrev = { sizeof(WINDOWPLACEMENT) }; 
+BOOL gbFullScreen = FALSE;
+
+//Entry point function
+
+int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpszCmdLine, int iCmdShow)
+{
+
+	// Local Function Declarations
+
+	int initialize(void);
+	void uninitialize(void);
+	void display(void);
+	void update(void);
+
+	
+	// Local variable declaration
+
+	WNDCLASSEX wndclass;
+	HWND hwnd;
+	MSG msg;
+	TCHAR szAppName[] = TEXT("PLP Window");
+	int iResult = 0;      
+	BOOL bDone = FALSE;   // To check game loop while condition
+
+
+	int ScreenWidth;
+	int ScreenHeight;
+	int x_screen_center;
+	int y_screen_center;
+
+	//code
+
+	ScreenWidth = GetSystemMetrics(SM_CXSCREEN);
+	ScreenHeight = GetSystemMetrics(SM_CYSCREEN);
+
+	x_screen_center = ScreenWidth / 2;
+	y_screen_center = ScreenHeight / 2;
+
+	gpFile = fopen("Log.txt", "w");
+	if (gpFile == NULL)
+	{
+		MessageBox(NULL, TEXT("Log file cannot be opened"), TEXT("ERROR"), MB_OK);
+		exit(0);
+	}
+
+	fprintf(gpFile, "Program startrd successfully\n");
+	
+	// WNDCLASSEX Initialization
+
+	wndclass.cbSize = sizeof(WNDCLASSEX);
+	wndclass.style = CS_HREDRAW | CS_VREDRAW | CS_OWNDC;  // use CS_OWNDC to stop purging from OS
+	wndclass.lpfnWndProc = WndProc;
+	wndclass.cbWndExtra = 0;
+	wndclass.cbClsExtra = 0;
+	wndclass.hInstance = hInstance;
+	wndclass.hbrBackground = (HBRUSH)GetStockObject(BLACK_BRUSH);
+	wndclass.hIcon = LoadIcon(hInstance, MAKEINTRESOURCE(MYICON));
+	wndclass.hCursor = LoadCursor(NULL, IDC_ARROW);
+	wndclass.lpszClassName = szAppName;
+	wndclass.lpszMenuName = NULL;
+	wndclass.hIconSm = LoadIcon(hInstance, MAKEINTRESOURCE(MYICON));
+
+	RegisterClassEx(&wndclass);
+
+	//create window
+
+	hwnd = CreateWindowEx(
+		WS_EX_APPWINDOW,
+		szAppName,
+		TEXT("Prathamesh Laxmikant Paropkari"),
+		WS_OVERLAPPEDWINDOW | WS_CLIPCHILDREN | WS_CLIPSIBLINGS | WS_VISIBLE,
+		(x_screen_center - 400),
+		(y_screen_center - 300),
+			WIN_WIDTH,
+			WIN_HEIGHT,
+		NULL,
+		NULL,
+		hInstance,
+		NULL
+	);
+
+	ghwnd = hwnd;
+
+	//initialization
+
+	iResult = initialize();
+
+	if (iResult != 0)
+	{
+		MessageBox(hwnd, TEXT("Initialization() failed"), TEXT("ERROR"), MB_OK | MB_ICONERROR);
+		
+		DestroyWindow(hwnd);
+	}
+
+
+	// Show the window
+
+	ShowWindow(hwnd, iCmdShow);
+	SetForegroundWindow(hwnd);
+	SetFocus(hwnd);
+
+	
+
+	
+
+	// Game loop
+
+	while (bDone == FALSE)
+	{
+		if (PeekMessage(&msg, NULL, 0, 0, PM_REMOVE))
+		{
+			if (msg.wParam == WM_QUIT)
+			{
+				bDone = TRUE;
+			}
+
+			else
+			{
+				TranslateMessage(&msg);
+				DispatchMessage(&msg);
+			}
+		}
+
+		else
+		{
+			if (gbActive == TRUE)
+			{
+				//Render
+
+				display();
+
+				//update
+
+				update();
+
+			}
+		}
+	}
+
+	//Uninitialization
+
+	uninitialize();
+
+	
+
+	return((int)msg.wParam);
+
+}
+
+// call back function
+
+LRESULT CALLBACK WndProc(HWND hwnd, UINT iMsg, WPARAM wParam, LPARAM lParam)
+{
+	
+	//Function declaration
+
+	void ToggleFullScreen(void);
+	void resize(int, int);
+
+
+	// code
+
+	switch (iMsg)
+	{
+	case WM_DESTROY:
+
+		
+		PostQuitMessage(0);
+		break;
+
+	case WM_SETFOCUS:
+		gbActive = TRUE;
+		break;
+
+	case WM_KILLFOCUS:
+		gbActive = FALSE;
+		break;
+
+	case WM_SIZE:
+		resize(LOWORD(lParam), HIWORD(lParam));   //lParam of WM_SIZE will give me WIDTH and HEIGHT
+		break;
+
+	case WM_ERASEBKGND:
+		return(0);
+		
+
+	case WM_KEYDOWN:                 // use for non character keys
+		switch (LOWORD(wParam))
+		{
+		case VK_ESCAPE:
+			DestroyWindow(hwnd);
+			break;
+
+		}
+		break;
+
+	case WM_CHAR:                    // use for character keys
+		switch (LOWORD(wParam))
+		{
+		case 'F':
+		case 'f':
+			if (gbFullScreen == FALSE)
+			{
+				ToggleFullScreen();
+				gbFullScreen = TRUE;
+			}
+			else
+			{
+				ToggleFullScreen();
+				gbFullScreen = FALSE;
+
+			}
+
+			break;
+
+
+
+
+		}
+
+		break;
+
+	case WM_CLOSE:
+		DestroyWindow(hwnd);
+		break;
+
+
+
+
+	default:
+		break;
+
+		
+		
+	}
+
+	return(DefWindowProc(hwnd, iMsg, wParam,lParam));  // Default Window procedure for all messages.
+	
+
+	
+}
+
+void ToggleFullScreen(void)
+{
+	// Local variable declarations 
+
+	MONITORINFO mi = { sizeof(MONITORINFO) };
+
+
+	//code
+
+	if (gbFullScreen == FALSE)
+	{
+		dwStyle = GetWindowLong(ghwnd, GWL_STYLE);
+
+		if (dwStyle & WS_OVERLAPPEDWINDOW)
+		{
+			if (GetWindowPlacement(ghwnd, &wpPrev) && GetMonitorInfo(MonitorFromWindow(ghwnd, MONITORINFOF_PRIMARY), &mi))
+			{
+				SetWindowLong(ghwnd, GWL_STYLE, dwStyle & ~WS_OVERLAPPEDWINDOW);
+				SetWindowPos(ghwnd, HWND_TOP, mi.rcMonitor.left, mi.rcMonitor.top, mi.rcMonitor.right - mi.rcMonitor.left, mi.rcMonitor.bottom - mi.rcMonitor.top, SWP_NOZORDER | SWP_FRAMECHANGED);
+			}
+		}
+
+		ShowCursor(FALSE);
+	}
+
+	else
+	{
+		SetWindowPlacement(ghwnd, &wpPrev);
+		SetWindowLong(ghwnd, GWL_STYLE, dwStyle | WS_OVERLAPPEDWINDOW);
+		SetWindowPos(ghwnd, HWND_TOP, 0, 0, 0, 0, SWP_NOMOVE | SWP_NOSIZE | SWP_NOOWNERZORDER | SWP_NOZORDER | SWP_FRAMECHANGED);
+		ShowCursor(TRUE);
+
+	}
+
+
+
+
+
+
+
+}
+
+int initialize(void)
+{
+	//funcion declarations
+
+
+	//code
+
+	return(0);
+}
+
+void resize(int weidth, int height)
+{
+	//code
+
+	if (height <= 0)
+	{
+		height = 1;
+	}
+}
+
+void display(void)
+{
+	//code
+}
+
+void update(void)
+{
+	//code
+
+}
+
+void uninitialize(void)
+{
+	//Function declarations
+
+	void ToggleFullScreen(void);
+
+	//code
+	
+	// if application is exiting in full screen
+
+	if (gbFullScreen == TRUE)
+	{
+		ToggleFullScreen();
+		gbFullScreen = FALSE;
+
+	}
+
+	// Distroy Window
+
+	if (ghwnd)
+	{
+		DestroyWindow(ghwnd);
+		ghwnd = NULL;
+
+	}
+
+	//close the log file
+
+	if (gpFile)
+	{
+		fprintf(gpFile, "Program Ended successfully\n");
+		fclose(gpFile);
+		gpFile = NULL;
+
+	}
+
+
+}
+
+
+
+
+
+
+
