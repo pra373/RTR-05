@@ -1,0 +1,7 @@
+#include<windows.h>
+
+#include "OGL.h"
+
+MYICON ICON  MyIcon.ico
+
+MySound WAVE Harry_Potter_Theme_for_Assignment.wav
