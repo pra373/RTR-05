@@ -325,6 +325,9 @@ void ToggleFullScreen(void)
 
 int initialize(void)
 {
+
+
+
 	//funcion declarations
 	void resize(int, int);
 
@@ -439,7 +442,62 @@ void resize(int width, int height)
 
 void display(void)
 {
-	double Inradious = 0.618033988;
+
+	GLdouble x1 = 0.0f;
+	GLdouble x2 = -1.0f;
+	GLdouble x3 = 1.0f;
+
+	GLdouble y1 = 1.0f;
+	GLdouble y2 = -1.0f;
+	GLdouble y3 = -1.0f;
+
+	GLdouble Semiperimeter;
+	GLdouble Area;
+	GLdouble Height;
+	GLdouble Inradious;
+	GLdouble Incenter_X;
+	GLdouble Incenter_Y;
+
+	/*GLdouble Length_A = sqrt(((x2 - x1) * (x2 - x1)) + ((y2 - y1) * (y2 - y1)));
+	GLdouble Length_B = sqrt(((x3 - x2) * (x3 - x2)) + ((y3 - y2) * (y3 - y2)));
+	GLdouble Length_C = sqrt(((x3 - x1) * (x3 - x1)) + ((y3 - y1) * (y3 - y1)));*/
+
+
+	GLdouble Length_A = sqrt(pow((x2 - x1), 2) + pow((y2 - y1), 2));
+	GLdouble Length_B = sqrt(pow((x3 - x2), 2) + pow((y3 - y2), 2));
+	GLdouble Length_C = sqrt(pow((x3 - x1), 2) + pow((y3 - y1), 2));
+
+	//calculate semiperimeter
+
+	Semiperimeter = (Length_A + Length_B + Length_C) / 2.0000000000;
+	
+	//calculate area of triangle using heron's formula.
+
+	Area = sqrt(Semiperimeter * (Semiperimeter - Length_A) * (Semiperimeter - Length_B) * (Semiperimeter - Length_C));
+
+	//calculating height of triangle
+
+	Height = Area / ((0.500000000) * Length_B);
+
+	//calculating Inradious
+	Inradious = Area / Semiperimeter;
+
+	//Calculating x coordinate of Incentre
+
+	Incenter_X = (((Length_A * x1) + (Length_B * x2) + (Length_C * x3)) / (Length_A + Length_B + Length_C));
+	Incenter_Y = (((Length_A * y1) + (Length_B * y2) + (Length_C * y3)) / (Length_A + Length_B + Length_C));
+
+
+	fprintf(gpFile, "Length of A = %lf, Length of B = %lf, Length of C = %lf\n\n", Length_A, Length_B, Length_C);
+	fprintf(gpFile, "Semiperimeter = %lf\n\n", Semiperimeter);
+	fprintf(gpFile, "Area = %lf\n\n", Area);
+	fprintf(gpFile, "height = %lf\n\n", Height);
+	fprintf(gpFile, "Inradious = %lf\n\n", Inradious);
+	fprintf(gpFile, "InCenter X Coordinate = %f\n\n", floor(Incenter_X));
+	fprintf(gpFile, "InCenter Y Coordinate = %f\n\n", floor(Incenter_Y));
+
+
+	//double Inradious = 0.618033988;
 	//code
 	glClear(GL_COLOR_BUFFER_BIT);
 	glMatrixMode(GL_MODELVIEW);
@@ -447,7 +505,7 @@ void display(void)
 	
 	glTranslatef(0.0f, 0.0f, -3.0f);
 
-	glBegin(GL_LINE_STRIP);
+	glBegin(GL_LINE_STRIP);              //Triangle
 
 	glColor3f(1.0f, 1.0f, 1.0f);
 	glVertex3f(0.0f, 1.0f, 0.0f);
@@ -465,19 +523,20 @@ void display(void)
 	
 
 	
-	glBegin(GL_POINTS);             //incircle starts
+	glBegin(GL_POINTS);             //incircle 
 
 	for (float angle = 0.0f; angle <= 360.0f; angle = angle + 0.1f)
 	{
 
 		//float radianangle = angle * (M_PI * 180.0f);
-		float x = Inradious * cos((angle * M_PI) / 180.0f) + (0.0f);
-		float y = Inradious * sin((angle * M_PI) / 180.0f) + (-0.38f);
-
+		/*float x = Inradious * cos((angle * M_PI) / 180.0f) + (0.0f);
+		float y = Inradious * sin((angle * M_PI) / 180.0f) + (0.38f);*/
+		float x = Inradious * cos(angle) + (floor(Incenter_X));
+		float y = Inradious * sin(angle) + (Incenter_Y - 0.07);
 
 
 		glColor3f(1.0f, 1.0f, 1.0f);
-		glVertex3f(0.0f, -0.38f, 0.0f);
+		glVertex3f(floor(Incenter_X), (Incenter_Y - 0.07), 0.0f);
 
 
 		glColor3f(1.0f, 1.0f, 1.0f);
@@ -490,7 +549,7 @@ void display(void)
 
 	glEnd();
 
-	glBegin(GL_LINES);
+	glBegin(GL_LINES);                  //central line
 
 	glColor3f(1.0f, 1.0f, 1.0f);
 	glVertex3f(0.0f, 1.0f, 0.0f);
