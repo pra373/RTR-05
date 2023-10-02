@@ -437,6 +437,27 @@ void resize(int width, int height)
 
 void display(void)
 {
+
+	struct colour
+	{
+		GLfloat Red;
+		GLfloat Green;
+		GLfloat Blue;
+	};
+	struct colour c[10] = {
+						  {1.0f,0.0f,0.0f},
+						  {0.0f,1.0f,0.0f},
+						  {0.0f,0.0f,1.0f},
+						  {0.0f, 1.0f, 1.0f},
+						  {1.0f, 0.0f, 1.0f},
+						  {1.0f, 1.0f, 0.0f},
+						  {1.0f, 1.0f, 1.0f},
+						  {1.0f, 0.49f, 0.0f},
+						  {(83.0f / 255.0f), (83.0f / 255.0f), (83.0f / 255.0f)},
+						  {(128.0f / 255.0f), (0.0f / 255.0f), (128.0f / 255.0f)}
+	};
+
+
 	//code
 	glClear(GL_COLOR_BUFFER_BIT);
 	glMatrixMode(GL_MODELVIEW);
@@ -444,184 +465,270 @@ void display(void)
 	
 	glTranslatef(0.0f, 0.0f, -3.0f);
 
-	glBegin(GL_LINE_STRIP);               //first quad (Outermost)
+	GLfloat TC = 1.0f;
+	for (int i = 1; i <= 10; i++)
+	{
+		if (i == 1)
+		{
+			glColor3f(c[0].Red, c[0].Green, c[0].Blue);
+		}
 
-	glColor3f(1.0f, 0.0f, 0.0f);
-	glVertex3f(0.9f, 0.9f, 0.0f);
+		else if (i == 2)
+		{
+			glColor3f(c[1].Red, c[1].Green, c[1].Blue);
+		}
 
-	
-	glVertex3f(-0.9f, 0.9f, 0.0f);
+		else if (i == 3)
+		{
+			glColor3f(c[2].Red, c[2].Green, c[2].Blue);
+		}
 
-	
-	glVertex3f(-0.9f, -0.9f, 0.0f);
+		else if (i == 4)
+		{
+			glColor3f(c[3].Red, c[3].Green, c[3].Blue);
+		}
 
-	glVertex3f(0.9f, -0.9f, 0.0f);
+		else if (i == 5)
+		{
+			glColor3f(c[4].Red, c[4].Green, c[4].Blue);
+		}
 
-	glVertex3f(0.9f, 0.9f, 0.0f);
+		else if (i == 6)
+		{
+			glColor3f(c[5].Red, c[5].Green, c[5].Blue);
+		}
 
-	glEnd();
+		else if (i == 7)
+		{
+			glColor3f(c[6].Red, c[6].Green, c[6].Blue);
+		}
 
-	glBegin(GL_LINE_STRIP);                  //Second quad(Second largest)
+		else if (i == 8)
+		{
+			glColor3f(c[7].Red, c[7].Green, c[7].Blue);
+		}
 
-	glColor3f(0.0f, 1.0f, 0.0f);
-	glVertex3f(0.8f, 0.8f, 0.0f);
+		else if (i == 9)
+		{
+			glColor3f(c[8].Red, c[8].Green, c[8].Blue);
+		}
 
+		else if (i == 10)
+		{
+			glColor3f(c[9].Red, c[9].Green, c[9].Blue);
+		}
 
-	glVertex3f(-0.8f, 0.8f, 0.0f);
+		else
+		{
+			glColor3f(c[4].Red, c[4].Green, c[4].Blue);
+		}
 
 
-	glVertex3f(-0.8f, -0.8f, 0.0f);
+		glBegin(GL_LINE_STRIP);
+		glVertex3f(TC, TC, 0.0f);
+		glVertex3f(-TC, TC, 0.0f);
+		glVertex3f(-TC, -TC, 0.0f);
+		glVertex3f(TC, -TC, 0.0f);
+		glVertex3f(TC, TC, 0.0f);
+		glEnd();
+		TC -= 0.1;
+	}
 
-	glVertex3f(0.8f, -0.8f, 0.0f);
+	//glBegin(GL_LINE_STRIP);               //first quad (Outermost)
 
-	glVertex3f(0.8f, 0.8f, 0.0f);
+	//glColor3f(1.0f, 0.0f, 0.0f);
+	//glVertex3f(1.0f, 1.0f, 0.0f);
 
-	glEnd();
 
-	glBegin(GL_LINE_STRIP);                  //Third quad(Third largest)
+	//glVertex3f(-1.0f, 1.0f, 0.0f);
 
-	glColor3f(0.0f, 0.0f, 1.0f);
-	glVertex3f(0.7f, 0.7f, 0.0f);
 
+	//glVertex3f(-1.0f, -1.0f, 0.0f);
 
-	glVertex3f(-0.7f, 0.7f, 0.0f);
+	//glVertex3f(1.0f, -1.0f, 0.0f);
 
+	//glVertex3f(1.0f, 1.0f, 0.0f);
 
-	glVertex3f(-0.7f, -0.7f, 0.0f);
+	//glEnd();
 
-	glVertex3f(0.7f, -0.7f, 0.0f);
+	//glBegin(GL_LINE_STRIP);               //second quad (Outermost)
 
-	glVertex3f(0.7f, 0.7f, 0.0f);
+	//glColor3f(0.0f, 1.0f, 0.0f);
+	//glVertex3f(0.9f, 0.9f, 0.0f);
 
-	glEnd();
+	//
+	//glVertex3f(-0.9f, 0.9f, 0.0f);
 
-	glBegin(GL_LINE_STRIP);                  //fourth quad
+	//
+	//glVertex3f(-0.9f, -0.9f, 0.0f);
 
-	glColor3f(0.0f, 1.0f, 1.0f);
-	glVertex3f(0.6f, 0.6f, 0.0f);
+	//glVertex3f(0.9f, -0.9f, 0.0f);
 
+	//glVertex3f(0.9f, 0.9f, 0.0f);
 
-	glVertex3f(-0.6f, 0.6f, 0.0f);
+	//glEnd();
 
+	//glBegin(GL_LINE_STRIP);                  //third quad(Second largest)
 
-	glVertex3f(-0.6f, -0.6f, 0.0f);
+	//glColor3f(0.0f, 0.0f, 1.0f);
+	//glVertex3f(0.8f, 0.8f, 0.0f);
 
-	glVertex3f(0.6f, -0.6f, 0.0f);
 
-	glVertex3f(0.6f, 0.6f, 0.0f);
+	//glVertex3f(-0.8f, 0.8f, 0.0f);
 
-	glEnd();
 
-	glBegin(GL_LINE_STRIP);                  //fifth quad
+	//glVertex3f(-0.8f, -0.8f, 0.0f);
 
-	glColor3f(1.0f, 0.0f, 1.0f);
+	//glVertex3f(0.8f, -0.8f, 0.0f);
 
-	glVertex3f(0.5f, 0.5f, 0.0f);
+	//glVertex3f(0.8f, 0.8f, 0.0f);
 
+	//glEnd();
 
-	glVertex3f(-0.5f, 0.5f, 0.0f);
+	//glBegin(GL_LINE_STRIP);                  //fourth quad(Third largest)
 
+	//glColor3f(0.0f, 1.0f, 1.0f);
+	//glVertex3f(0.7f, 0.7f, 0.0f);
 
-	glVertex3f(-0.5f, -0.5f, 0.0f);
 
-	glVertex3f(0.5f, -0.5f, 0.0f);
+	//glVertex3f(-0.7f, 0.7f, 0.0f);
 
-	glVertex3f(0.5f, 0.5f, 0.0f);
 
-	glEnd();
+	//glVertex3f(-0.7f, -0.7f, 0.0f);
 
-	glBegin(GL_LINE_STRIP);                  //sixth quad
+	//glVertex3f(0.7f, -0.7f, 0.0f);
 
-	glColor3f(1.0f, 1.0f, 0.0f);
+	//glVertex3f(0.7f, 0.7f, 0.0f);
 
-	glVertex3f(0.4f, 0.4f, 0.0f);
+	//glEnd();
 
+	//glBegin(GL_LINE_STRIP);                  //fifth quad
 
-	glVertex3f(-0.4f, 0.4f, 0.0f);
+	//glColor3f(1.0f, 0.0f, 1.0f);
+	//glVertex3f(0.6f, 0.6f, 0.0f);
 
 
-	glVertex3f(-0.4f, -0.4f, 0.0f);
+	//glVertex3f(-0.6f, 0.6f, 0.0f);
 
-	glVertex3f(0.4f, -0.4f, 0.0f);
 
-	glVertex3f(0.4f, 0.4f, 0.0f);
+	//glVertex3f(-0.6f, -0.6f, 0.0f);
 
-	glEnd();
+	//glVertex3f(0.6f, -0.6f, 0.0f);
 
-	glBegin(GL_LINE_STRIP);                  //seventh quad
+	//glVertex3f(0.6f, 0.6f, 0.0f);
 
-	glColor3f(1.0f, 1.0f, 1.0f);
+	//glEnd();
 
-	glVertex3f(0.3f, 0.3f, 0.0f);
+	//glBegin(GL_LINE_STRIP);                  //sixth quad
 
+	//glColor3f(1.0f, 1.0f, 0.0f);
 
-	glVertex3f(-0.3f, 0.3f, 0.0f);
+	//glVertex3f(0.5f, 0.5f, 0.0f);
 
 
-	glVertex3f(-0.3f, -0.3f, 0.0f);
+	//glVertex3f(-0.5f, 0.5f, 0.0f);
 
-	glVertex3f(0.3f, -0.3f, 0.0f);
 
-	glVertex3f(0.3f, 0.3f, 0.0f);
+	//glVertex3f(-0.5f, -0.5f, 0.0f);
 
-	glEnd();
+	//glVertex3f(0.5f, -0.5f, 0.0f);
 
-	glBegin(GL_LINE_STRIP);                  //eighth quad
+	//glVertex3f(0.5f, 0.5f, 0.0f);
 
-	glColor3f(1.0f, 0.49f, 0.0f);
+	//glEnd();
 
+	//glBegin(GL_LINE_STRIP);                  //seventh quad
 
-	glVertex3f(0.2f, 0.2f, 0.0f);
+	//glColor3f(1.0f, 1.0f, 1.0f);
 
+	//glVertex3f(0.4f, 0.4f, 0.0f);
 
-	glVertex3f(-0.2f, 0.2f, 0.0f);
 
+	//glVertex3f(-0.4f, 0.4f, 0.0f);
 
-	glVertex3f(-0.2f, -0.2f, 0.0f);
 
-	glVertex3f(0.2f, -0.2f, 0.0f);
+	//glVertex3f(-0.4f, -0.4f, 0.0f);
 
-	glVertex3f(0.2f, 0.2f, 0.0f);
+	//glVertex3f(0.4f, -0.4f, 0.0f);
 
-	glEnd();
+	//glVertex3f(0.4f, 0.4f, 0.0f);
 
-	glBegin(GL_LINE_STRIP);                  //ninth quad
+	//glEnd();
 
-	glColor3f((83.0f / 255.0f), (83.0f / 255.0f), (83.0f / 255.0f));
+	//glBegin(GL_LINE_STRIP);                  //eighth quad
 
+	//glColor3f(1.0f, 0.49f, 0.0f);
 
-	glVertex3f(0.1f, 0.1f, 0.0f);
+	//glVertex3f(0.3f, 0.3f, 0.0f);
 
 
-	glVertex3f(-0.1f, 0.1f, 0.0f);
+	//glVertex3f(-0.3f, 0.3f, 0.0f);
 
 
-	glVertex3f(-0.1f, -0.1f, 0.0f);
+	//glVertex3f(-0.3f, -0.3f, 0.0f);
 
-	glVertex3f(0.1f, -0.1f, 0.0f);
+	//glVertex3f(0.3f, -0.3f, 0.0f);
 
-	glVertex3f(0.1f, 0.1f, 0.0f);
+	//glVertex3f(0.3f, 0.3f, 0.0f);
 
-	glEnd();
+	//glEnd();
 
-	glBegin(GL_LINE_STRIP);                  //Tenth quad
+	//glBegin(GL_LINE_STRIP);                  //ninth quad
 
-	glColor3f((128.0f / 255.0f), (0.0f / 255.0f), (128.0f / 255.0f));
+	//glColor3f((83.0f / 255.0f), (83.0f / 255.0f), (83.0f / 255.0f));
 
 
-	glVertex3f(0.05f, 0.05f, 0.0f);
+	//glVertex3f(0.2f, 0.2f, 0.0f);
 
 
-	glVertex3f(-0.05f, 0.05f, 0.0f);
+	//glVertex3f(-0.2f, 0.2f, 0.0f);
 
 
-	glVertex3f(-0.05f, -0.05f, 0.0f);
+	//glVertex3f(-0.2f, -0.2f, 0.0f);
 
-	glVertex3f(0.05f, -0.05f, 0.0f);
+	//glVertex3f(0.2f, -0.2f, 0.0f);
 
-	glVertex3f(0.05f, 0.05f, 0.0f);
+	//glVertex3f(0.2f, 0.2f, 0.0f);
 
-	glEnd();
+	//glEnd();
+
+	//glBegin(GL_LINE_STRIP);                  //tenth quad
+
+	//glColor3f((128.0f / 255.0f), (0.0f / 255.0f), (128.0f / 255.0f));
+
+
+	//glVertex3f(0.1f, 0.1f, 0.0f);
+
+
+	//glVertex3f(-0.1f, 0.1f, 0.0f);
+
+
+	//glVertex3f(-0.1f, -0.1f, 0.0f);
+
+	//glVertex3f(0.1f, -0.1f, 0.0f);
+
+	//glVertex3f(0.1f, 0.1f, 0.0f);
+
+	//glEnd();
+
+	////glBegin(GL_LINE_STRIP);                  //Tenth quad
+
+	////glColor3f((128.0f / 255.0f), (0.0f / 255.0f), (128.0f / 255.0f));
+
+
+	////glVertex3f(0.05f, 0.05f, 0.0f);
+
+
+	////glVertex3f(-0.05f, 0.05f, 0.0f);
+
+
+	////glVertex3f(-0.05f, -0.05f, 0.0f);
+
+	////glVertex3f(0.05f, -0.05f, 0.0f);
+
+	////glVertex3f(0.05f, 0.05f, 0.0f);
+
+	////glEnd();
 
 
 
