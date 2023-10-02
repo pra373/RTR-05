@@ -440,16 +440,27 @@ void resize(int width, int height)
 
 void display(void)
 {
-	GLfloat radious1 = 1.0f;
-	GLfloat radious2 = 0.9f;
-	GLfloat radious3 = 0.8f;
-	GLfloat radious4 = 0.7f;
-	GLfloat radious5 = 0.6f;
-	GLfloat radious6 = 0.5f;
-	GLfloat radious7 = 0.4f;
-	GLfloat radious8 = 0.3f;
-	GLfloat radious9 = 0.2f;
-	GLfloat radious10 = 0.1f;
+	struct colour
+	{
+		GLfloat Red;
+		GLfloat Green;
+		GLfloat Blue;
+	};
+	struct colour c[10] = {
+						  {1.0f,0.0f,0.0f},
+						  {0.0f,1.0f,0.0f},
+						  {0.0f,0.0f,1.0f},
+						  {0.0f, 1.0f, 1.0f},
+						  {1.0f, 0.0f, 1.0f},
+						  {1.0f, 1.0f, 0.0f},
+						  {1.0f, 1.0f, 1.0f},
+						  {1.0f, 0.49f, 0.0f},
+						  {(83.0f / 255.0f), (83.0f / 255.0f), (83.0f / 255.0f)},
+						  {(128.0f / 255.0f), (0.0f / 255.0f), (128.0f / 255.0f)}
+	};
+
+	GLfloat radious[10] = { 1.0f,0.9f,0.8f,0.7f,0.6f,0.5f,0.4f,0.3f,0.2f,0.1f };
+	
 	//code
 	glClear(GL_COLOR_BUFFER_BIT);
 	glMatrixMode(GL_MODELVIEW);
@@ -457,267 +468,79 @@ void display(void)
 	
 	glTranslatef(0.0f, 0.0f, -3.0f);
 
-	glBegin(GL_POINTS);                                   //first circle (largest)
-
-	for (float angle = 0.0f; angle <= 360.0f; angle = angle + 0.1f)
+	for (int i = 0; i < 10; i++)
 	{
 
-		//float radianangle = angle * (M_PI * 180.0f);
-		float x = radious1 * cos((angle * M_PI) / 180.0f) + (0.0f);
-		float y = radious1 * sin((angle * M_PI) / 180.0f) + (0.0f);
+		if (i == 0)
+		{
+			glColor3f(c[0].Red, c[0].Green, c[0].Blue);
+		}
+
+		else if (i == 1)
+		{
+			glColor3f(c[1].Red, c[1].Green, c[1].Blue);
+		}
+
+		else if (i == 2)
+		{
+			glColor3f(c[2].Red, c[2].Green, c[2].Blue);
+		}
+
+		else if (i == 3)
+		{
+			glColor3f(c[3].Red, c[3].Green, c[3].Blue);
+		}
+
+		else if (i == 4)
+		{
+			glColor3f(c[4].Red, c[4].Green, c[4].Blue);
+		}
+
+		else if (i == 5)
+		{
+			glColor3f(c[5].Red, c[5].Green, c[5].Blue);
+		}
+
+		else if (i == 6)
+		{
+			glColor3f(c[6].Red, c[6].Green, c[6].Blue);
+		}
+
+		else if (i == 7)
+		{
+			glColor3f(c[7].Red, c[7].Green, c[7].Blue);
+		}
+
+		else if (i == 8)
+		{
+			glColor3f(c[8].Red, c[8].Green, c[8].Blue);
+		}
+
+		else if (i == 9)
+		{
+			glColor3f(c[9].Red, c[9].Green, c[9].Blue);
+		}
+
+		else
+		{
+			glColor3f(c[4].Red, c[4].Green, c[4].Blue);
+		}
+		glBegin(GL_POINTS);
+		for (float angle = 0.0f; angle <= 360.0f; angle = angle + 0.1f)
+		{
+			float x = radious[i] * cos((angle * M_PI) / 180.0f) + (0.0f);
+			float y = radious[i] * sin((angle * M_PI) / 180.0f) + (0.0f);
+
+			//glColor3f(1.0f, 0.0f, 0.0f);
+			glVertex3f(0.0f, 0.0f, 0.0f);
 
 
+			//glColor3f(1.0f, 0.0f, 0.0f);
+			glVertex3f(x, y, 0.0f);
 
-		glColor3f(1.0f, 0.0f, 0.0f);
-		glVertex3f(0.0f, 0.0f, 0.0f);
-
-
-		glColor3f(1.0f, 0.0f, 0.0f);
-		glVertex3f(x, y, 0.0f);
-
-
-
-
+		}
+		glEnd();
 	}
-
-	glEnd();
-
-	glBegin(GL_POINTS);                          //second circle(Second largest)
-
-	for (float angle = 0.0f; angle <= 360.0f; angle = angle + 0.1f)
-	{
-
-		//float radianangle = angle * (M_PI * 180.0f);
-		float x = radious2 * cos((angle * M_PI) / 180.0f) + (0.0f);
-		float y = radious2 * sin((angle * M_PI) / 180.0f) + (0.0f);
-
-
-
-		glColor3f(0.0f, 1.0f, 0.0f);
-		glVertex3f(0.0f, 0.0f, 0.0f);
-
-
-		glColor3f(0.0f, 1.0f, 0.0f);
-		glVertex3f(x, y, 0.0f);
-
-
-
-
-	}
-
-	glEnd();
-
-	glBegin(GL_POINTS);                          //third circle (third largest)
-
-	for (float angle = 0.0f; angle <= 360.0f; angle = angle + 0.1f)
-	{
-
-		//float radianangle = angle * (M_PI * 180.0f);
-		float x = radious3 * cos((angle * M_PI) / 180.0f) + (0.0f);
-		float y = radious3 * sin((angle * M_PI) / 180.0f) + (0.0f);
-
-
-
-		glColor3f(0.0f, 0.0f, 1.0f);
-		glVertex3f(0.0f, 0.0f, 0.0f);
-
-
-		glColor3f(0.0f, 0.0f, 1.0f);
-		glVertex3f(x, y, 0.0f);
-
-
-
-
-	}
-
-	glEnd();
-
-	glBegin(GL_POINTS);                          //fourth circle 
-
-	for (float angle = 0.0f; angle <= 360.0f; angle = angle + 0.1f)
-	{
-
-		//float radianangle = angle * (M_PI * 180.0f);
-		float x = radious4 * cos((angle * M_PI) / 180.0f) + (0.0f);
-		float y = radious4 * sin((angle * M_PI) / 180.0f) + (0.0f);
-
-
-
-		glColor3f(0.0f, 1.0f, 1.0f);
-		glVertex3f(0.0f, 0.0f, 0.0f);
-
-
-		glColor3f(0.0f, 1.0f, 1.0f);
-		glVertex3f(x, y, 0.0f);
-
-
-
-
-	}
-
-	glEnd();
-
-	glBegin(GL_POINTS);                          //fifth circle 
-
-	for (float angle = 0.0f; angle <= 360.0f; angle = angle + 0.1f)
-	{
-
-		//float radianangle = angle * (M_PI * 180.0f);
-		float x = radious5 * cos((angle * M_PI) / 180.0f) + (0.0f);
-		float y = radious5 * sin((angle * M_PI) / 180.0f) + (0.0f);
-
-
-
-		glColor3f(1.0f, 0.0f, 1.0f);
-		glVertex3f(0.0f, 0.0f, 0.0f);
-
-
-		glColor3f(1.0f, 0.0f, 1.0f);
-		glVertex3f(x, y, 0.0f);
-
-
-
-
-	}
-
-	glEnd();
-
-	glBegin(GL_POINTS);                          //Sixth circle 
-
-	for (float angle = 0.0f; angle <= 360.0f; angle = angle + 0.1f)
-	{
-
-		//float radianangle = angle * (M_PI * 180.0f);
-		float x = radious6 * cos((angle * M_PI) / 180.0f) + (0.0f);
-		float y = radious6 * sin((angle * M_PI) / 180.0f) + (0.0f);
-
-
-
-		glColor3f(1.0f, 1.0f, 0.0f);
-		glVertex3f(0.0f, 0.0f, 0.0f);
-
-
-		glColor3f(1.0f, 1.0f, 0.0f);
-		glVertex3f(x, y, 0.0f);
-
-
-
-
-	}
-
-	glEnd();
-
-	glBegin(GL_POINTS);                          //Seventh circle 
-
-	for (float angle = 0.0f; angle <= 360.0f; angle = angle + 0.1f)
-	{
-
-		//float radianangle = angle * (M_PI * 180.0f);
-		float x = radious7 * cos((angle * M_PI) / 180.0f) + (0.0f);
-		float y = radious7 * sin((angle * M_PI) / 180.0f) + (0.0f);
-
-
-
-		glColor3f(1.0f, 1.0f, 1.0f);
-		glVertex3f(0.0f, 0.0f, 0.0f);
-
-
-		glColor3f(1.0f, 1.0f, 1.0f);
-		glVertex3f(x, y, 0.0f);
-
-
-
-
-	}
-
-	glEnd();
-
-	glBegin(GL_POINTS);                          //eighth circle 
-
-	for (float angle = 0.0f; angle <= 360.0f; angle = angle + 0.1f)
-	{
-
-		//float radianangle = angle * (M_PI * 180.0f);
-		float x = radious8 * cos((angle * M_PI) / 180.0f) + (0.0f);
-		float y = radious8 * sin((angle * M_PI) / 180.0f) + (0.0f);
-
-
-
-		glColor3f(1.0f, 0.49f, 0.0f);
-
-		glVertex3f(0.0f, 0.0f, 0.0f);
-
-
-		glColor3f(1.0f, 0.49f, 0.0f);
-
-		glVertex3f(x, y, 0.0f);
-
-
-
-
-	}
-
-	glEnd();
-
-	glBegin(GL_POINTS);                          //Ninth circle 
-
-	for (float angle = 0.0f; angle <= 360.0f; angle = angle + 0.1f)
-	{
-
-		//float radianangle = angle * (M_PI * 180.0f);
-		float x = radious9 * cos((angle * M_PI) / 180.0f) + (0.0f);
-		float y = radious9 * sin((angle * M_PI) / 180.0f) + (0.0f);
-
-
-
-		
-		glColor3f((83.0f / 255.0f), (83.0f / 255.0f), (83.0f / 255.0f));
-
-		glVertex3f(0.0f, 0.0f, 0.0f);
-
-
-		
-		glColor3f((83.0f / 255.0f), (83.0f / 255.0f), (83.0f / 255.0f));
-
-		glVertex3f(x, y, 0.0f);
-
-
-
-
-	}
-
-	glEnd();
-
-	glBegin(GL_POINTS);                          //Tenth circle 
-
-	for (float angle = 0.0f; angle <= 360.0f; angle = angle + 0.1f)
-	{
-
-		//float radianangle = angle * (M_PI * 180.0f);
-		float x = radious10 * cos((angle * M_PI) / 180.0f) + (0.0f);
-		float y = radious10 * sin((angle * M_PI) / 180.0f) + (0.0f);
-
-
-
-
-		
-
-		glColor3f((128.0f / 255.0f), (0.0f / 255.0f), (128.0f / 255.0f));
-		glVertex3f(0.0f, 0.0f, 0.0f);
-
-
-
-		
-		glColor3f((128.0f / 255.0f), (0.0f / 255.0f), (128.0f / 255.0f));
-		glVertex3f(x, y, 0.0f);
-
-
-
-
-	}
-
-	glEnd();
-
 	
 
 	
