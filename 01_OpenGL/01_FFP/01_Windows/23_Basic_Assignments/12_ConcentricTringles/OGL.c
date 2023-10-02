@@ -34,13 +34,15 @@ FILE *gpFile = NULL;           // (gpFile) global pointer to a file
 HWND ghwnd = NULL;             // handle of window
 BOOL gbActive = FALSE;
 DWORD dwStyle = 0;
-WINDOWPLACEMENT wpPrev = { sizeof(WINDOWPLACEMENT) }; 
+WINDOWPLACEMENT wpPrev = { sizeof(WINDOWPLACEMENT) };
 BOOL gbFullScreen = FALSE;
 
 //OpenGL Related Global variables
 
 HDC ghdc = NULL;
 HGLRC ghrc = NULL;
+
+
 
 //Entry point function
 
@@ -54,14 +56,14 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpszCmdLi
 	void display(void);
 	void update(void);
 
-	
+
 	// Local variable declaration
 
 	WNDCLASSEX wndclass;
 	HWND hwnd;
 	MSG msg;
 	TCHAR szAppName[] = TEXT("PLP Window");
-	int iResult = 0;      
+	int iResult = 0;
 	BOOL bDone = FALSE;   // To check game loop while condition
 
 
@@ -86,7 +88,7 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpszCmdLi
 	}
 
 	fprintf(gpFile, "Program startrd successfully\n");
-	
+
 	// WNDCLASSEX Initialization
 
 	wndclass.cbSize = sizeof(WNDCLASSEX);
@@ -113,8 +115,8 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpszCmdLi
 		WS_OVERLAPPEDWINDOW | WS_CLIPCHILDREN | WS_CLIPSIBLINGS | WS_VISIBLE,
 		(x_screen_center - 400),
 		(y_screen_center - 300),
-			WIN_WIDTH,
-			WIN_HEIGHT,
+		WIN_WIDTH,
+		WIN_HEIGHT,
 		NULL,
 		NULL,
 		hInstance,
@@ -130,7 +132,7 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpszCmdLi
 	if (iResult != 0)
 	{
 		MessageBox(hwnd, TEXT("Initialization() failed"), TEXT("ERROR"), MB_OK | MB_ICONERROR);
-		
+
 		DestroyWindow(hwnd);
 	}
 
@@ -141,9 +143,9 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpszCmdLi
 	SetForegroundWindow(hwnd);
 	SetFocus(hwnd);
 
-	
 
-	
+
+
 
 	// Game loop
 
@@ -183,7 +185,7 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpszCmdLi
 
 	uninitialize();
 
-	
+
 
 	return((int)msg.wParam);
 
@@ -193,7 +195,7 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpszCmdLi
 
 LRESULT CALLBACK WndProc(HWND hwnd, UINT iMsg, WPARAM wParam, LPARAM lParam)
 {
-	
+
 	//Function declaration
 
 	void ToggleFullScreen(void);
@@ -206,7 +208,7 @@ LRESULT CALLBACK WndProc(HWND hwnd, UINT iMsg, WPARAM wParam, LPARAM lParam)
 	{
 	case WM_DESTROY:
 
-		
+
 		PostQuitMessage(0);
 		break;
 
@@ -224,7 +226,7 @@ LRESULT CALLBACK WndProc(HWND hwnd, UINT iMsg, WPARAM wParam, LPARAM lParam)
 
 	case WM_ERASEBKGND:
 		return(0);
-		
+
 
 	case WM_KEYDOWN:                 // use for non character keys
 		switch (LOWORD(wParam))
@@ -272,14 +274,14 @@ LRESULT CALLBACK WndProc(HWND hwnd, UINT iMsg, WPARAM wParam, LPARAM lParam)
 	default:
 		break;
 
-		
-		
+
+
 	}
 
-	return(DefWindowProc(hwnd, iMsg, wParam,lParam));  // Default Window procedure for all messages.
-	
+	return(DefWindowProc(hwnd, iMsg, wParam, lParam));  // Default Window procedure for all messages.
 
-	
+
+
 }
 
 void ToggleFullScreen(void)
@@ -410,14 +412,14 @@ int initialize(void)
 	resize(WIN_WIDTH, WIN_HEIGHT);
 
 
-	
-
-	
 
 
 
 
-	return(0);   
+
+
+
+	return(0);
 }
 
 void resize(int width, int height)
@@ -429,7 +431,7 @@ void resize(int width, int height)
 		height = 1;
 	}
 
-	glMatrixMode(GL_PROJECTION);  
+	glMatrixMode(GL_PROJECTION);
 	glLoadIdentity();
 
 	glViewport(0, 0, (GLsizei)width, (GLsizei)height);
@@ -438,164 +440,359 @@ void resize(int width, int height)
 
 }
 
+
 void display(void)
 {
+	struct colour
+	{
+		GLfloat Red;
+		GLfloat Green;
+		GLfloat Blue;
+	};
+	struct colour c[10] = {
+						  {1.0f,0.0f,0.0f},
+						  {0.0f,1.0f,0.0f},
+						  {0.0f,0.0f,1.0f},
+						  {0.0f, 1.0f, 1.0f},
+						  {1.0f, 0.0f, 1.0f},
+						  {1.0f, 1.0f, 0.0f},
+						  {1.0f, 1.0f, 1.0f},
+						  {1.0f, 0.49f, 0.0f},
+						  {(83.0f / 255.0f), (83.0f / 255.0f), (83.0f / 255.0f)},
+						  {(128.0f / 255.0f), (0.0f / 255.0f), (128.0f / 255.0f)}
+	};
+
 	//code
 	glClear(GL_COLOR_BUFFER_BIT);
 	glMatrixMode(GL_MODELVIEW);
 	glLoadIdentity();
-	
+
 	glTranslatef(0.0f, 0.0f, -3.0f);
 
-	glBegin(GL_LINE_STRIP);          //first triangle outmost
+	GLfloat TC = 1.0f;
+	for (int i = 1; i <= 10; i++)
+	{
+		if (i == 1)
+		{
+			glColor3f(c[0].Red, c[0].Green, c[0].Blue);
+		}
+
+		else if (i == 2)
+		{
+			glColor3f(c[1].Red, c[1].Green, c[1].Blue);
+		}
+
+		else if (i == 3)
+		{
+			glColor3f(c[2].Red, c[2].Green, c[2].Blue);
+		}
+
+		else if (i == 4)
+		{
+			glColor3f(c[3].Red, c[3].Green, c[3].Blue);
+		}
+
+		else if (i == 5)
+		{
+			glColor3f(c[4].Red, c[4].Green, c[4].Blue);
+		}
+
+		else if (i == 6)
+		{
+			glColor3f(c[5].Red, c[5].Green, c[5].Blue);
+		}
+
+		else if (i == 7)
+		{
+			glColor3f(c[6].Red, c[6].Green, c[6].Blue);
+		}
+
+		else if (i == 8)
+		{
+			glColor3f(c[7].Red, c[7].Green, c[7].Blue);
+		}
+
+		else if (i == 9)
+		{
+			glColor3f(c[8].Red, c[8].Green, c[8].Blue);
+		}
+
+		else if (i == 10)
+		{
+			glColor3f(c[9].Red, c[9].Green, c[9].Blue);
+		}
+
+		else
+		{
+			glColor3f(c[4].Red, c[4].Green, c[4].Blue);
+		}
+
+		glBegin(GL_LINE_STRIP);
+		glVertex3f(0.0f, TC, 0.0f);
+		glVertex3f(-TC, -TC, 0.0f);
+		glVertex3f(TC, -TC, 0.0f);
+		glVertex3f(0.0f, TC, 0.0f);
+		glEnd();
+		TC -= 0.1;
 
-	glColor3f(1.0f, 0.0f, 0.0f);
-	glVertex3f(0.0f, 1.0f, 0.0f);
+	}
 
-	
-	glVertex3f(-1.0f, -1.0f, 0.0f);
+	//while (TC >= 0.1f)
+	//{
+	//	glBegin(GL_LINE_STRIP);
+	//	fprintf(gpFile, "TC = %f \n", TC);
+	//	if (TC == 1.0f)
+	//	{
+	//		glColor3f(1.0f, 0.0f, 0.0f);
+	//		fprintf(gpFile, "Inside first if block (TC==1.0f), TC = %f \n", TC);
+	//	}
+	//	else if (TC == 0.9f)
+	//	{
+	//		glColor3f(0.0f, 1.0f, 0.0f);
+	//		fprintf(gpFile, "Inside else if block (TC=0.9f), TC = %f \n", TC);
 
-	
-	glVertex3f(1.0f, -1.0f, 0.0f);
+	//	}
+	//	else if (TC == 0.8f)
+	//	{
+	//		glColor3f(0.0f, 0.0f, 1.0f);
+	//		fprintf(gpFile, "Inside else if block (TC=0.8f), TC = %f \n", TC);
 
-	glVertex3f(0.0f, 1.0f, 0.0f);
+	//	}
+	//	else if (TC == 0.7f)
+	//	{
+	//		glColor3f(0.0f, 1.0f, 1.0f);
+	//		fprintf(gpFile, "Inside else if block (TC=0.7f), TC = %f \n", TC);
 
-	glEnd();
+	//	}
+	//	else if (TC == 0.6f)
+	//	{
+	//		glColor3f(1.0f, 0.0f, 1.0f);
+	//		fprintf(gpFile, "Inside else if block (TC=0.6f), TC = %f \n", TC);
 
-	glBegin(GL_LINE_STRIP);          //second triangle (Second Largest)
+	//	}
+	//	else if (TC == 0.5f)
+	//	{
+	//		glColor3f(1.0f, 1.0f, 0.0f);
+	//		fprintf(gpFile, "Inside else if block (TC=0.5f), TC = %f \n", TC);
 
-	glColor3f(0.0f, 1.0f, 0.0f);
-	glVertex3f(0.0f, 0.9f, 0.0f);
+	//	}
+	//	else if (TC == 0.4f)
+	//	{
+	//		glColor3f(1.0f, 1.0f, 1.0f);
+	//		fprintf(gpFile, "Inside else if block (TC=0.4f), TC = %f \n", TC);
 
+	//	}
+	//	else if (TC == 0.3f)
+	//	{
+	//		glColor3f(1.0f, 0.49f, 0.0f);
+	//		fprintf(gpFile, "Inside else if block (TC=0.3f), TC = %f \n", TC);
 
-	glVertex3f(-0.9f, -0.9f, 0.0f);
+	//	}
+	//	else if (TC == 0.2f)
+	//	{
+	//		glColor3f((83.0f / 255.0f), (83.0f / 255.0f), (83.0f / 255.0f));
+	//		fprintf(gpFile, "Inside else if block (TC=0.2f), TC = %f \n", TC);
 
+	//	}
 
-	glVertex3f(0.9f, -0.9f, 0.0f);
+	//	else if (TC == 0.1f)
+	//	{
+	//		glColor3f((128.0f / 255.0f), (0.0f / 255.0f), (128.0f / 255.0f));
+	//		fprintf(gpFile, "Inside else if block (TC=0.1f), TC = %f \n", TC);
 
-	glVertex3f(0.0f, 0.9f, 0.0f);
+	//	}
+	//	/*else
+	//	{
+	//		glColor3f(1.0f, 1.0f, 1.0f);
+	//		fprintf(gpFile, "Inside else block (TC < 0.1), TC = %f \n", TC);
 
-	glEnd();
 
-	glBegin(GL_LINE_STRIP);          //Third triangle (Third Largest)
+	//	}*/
+	//	
+	//	glVertex3f(0.0f, TC, 0.0f);
+	//	glVertex3f(-TC, -TC, 0.0f);
+	//	glVertex3f(TC, -TC, 0.0f);
+	//	glVertex3f(0.0f, TC, 0.0f);
+	//	glEnd();
+	//	TC = TC - 0.1f;
+	//}
 
-	glColor3f(0.0f, 0.0f, 1.0f);
-	glVertex3f(0.0f, 0.8f, 0.0f);
 
 
-	glVertex3f(-0.8f, -0.8f, 0.0f);
 
 
-	glVertex3f(0.8f, -0.8f, 0.0f);
 
-	glVertex3f(0.0f, 0.8f, 0.0f);
 
-	glEnd();
 
-	glBegin(GL_LINE_STRIP);          //fourth triangle 
 
-	glColor3f(0.0f, 1.0f, 1.0f);
-	glVertex3f(0.0f, 0.7f, 0.0f);
 
 
-	glVertex3f(-0.7f, -0.7f, 0.0f);
 
 
-	glVertex3f(0.7f, -0.7f, 0.0f);
 
-	glVertex3f(0.0f, 0.7f, 0.0f);
 
-	glEnd();
 
-	glBegin(GL_LINE_STRIP);          //fifth triangle 
 
-	glColor3f(1.0f, 0.0f, 1.0f);
-	glVertex3f(0.0f, 0.6f, 0.0f);
 
 
-	glVertex3f(-0.6f, -0.6f, 0.0f);
 
 
-	glVertex3f(0.6f, -0.6f, 0.0f);
 
-	glVertex3f(0.0f, 0.6f, 0.0f);
 
-	glEnd();
 
-	glBegin(GL_LINE_STRIP);          //sixth triangle 
 
-	glColor3f(1.0f, 1.0f, 0.0f);
-	glVertex3f(0.0f, 0.5f, 0.0f);
 
 
-	glVertex3f(-0.5f, -0.5f, 0.0f);
 
+	//glBegin(GL_LINE_STRIP);          //first triangle outmost
 
-	glVertex3f(0.5f, -0.5f, 0.0f);
+	//glColor3f(1.0f, 0.0f, 0.0f);
+	//glVertex3f(0.0f, 1.0f, 0.0f);
 
-	glVertex3f(0.0f, 0.5f, 0.0f);
+	//
+	//glVertex3f(-1.0f, -1.0f, 0.0f);
 
-	glEnd();
+	//
+	//glVertex3f(1.0f, -1.0f, 0.0f);
 
-	glBegin(GL_LINE_STRIP);          //seventh triangle 
+	//glVertex3f(0.0f, 1.0f, 0.0f);
 
-	glColor3f(1.0f, 1.0f, 1.0f);
-	glVertex3f(0.0f, 0.4f, 0.0f);
+	//glEnd();
 
+	//glBegin(GL_LINE_STRIP);          //second triangle (Second Largest)
 
-	glVertex3f(-0.4f, -0.4f, 0.0f);
+	//glColor3f(0.0f, 1.0f, 0.0f);
+	//glVertex3f(0.0f, 0.9f, 0.0f);
 
 
-	glVertex3f(0.4f, -0.4f, 0.0f);
+	//glVertex3f(-0.9f, -0.9f, 0.0f);
 
-	glVertex3f(0.0f, 0.4f, 0.0f);
 
-	glEnd();
+	//glVertex3f(0.9f, -0.9f, 0.0f);
 
-	glBegin(GL_LINE_STRIP);          //eighth triangle 
+	//glVertex3f(0.0f, 0.9f, 0.0f);
 
-	glColor3f(1.0f, 0.49f, 0.0f);
-	glVertex3f(0.0f, 0.3f, 0.0f);
+	//glEnd();
 
+	//glBegin(GL_LINE_STRIP);          //Third triangle (Third Largest)
 
-	glVertex3f(-0.3f, -0.3f, 0.0f);
+	//glColor3f(0.0f, 0.0f, 1.0f);
+	//glVertex3f(0.0f, 0.8f, 0.0f);
 
 
-	glVertex3f(0.3f, -0.3f, 0.0f);
+	//glVertex3f(-0.8f, -0.8f, 0.0f);
 
-	glVertex3f(0.0f, 0.3f, 0.0f);
 
-	glEnd();
+	//glVertex3f(0.8f, -0.8f, 0.0f);
 
-	glBegin(GL_LINE_STRIP);          //ninth triangle 
+	//glVertex3f(0.0f, 0.8f, 0.0f);
 
-	glColor3f((83.0f/255.0f), (83.0f/255.0f), (83.0f / 255.0f));
-	glVertex3f(0.0f, 0.2f, 0.0f);
+	//glEnd();
 
+	//glBegin(GL_LINE_STRIP);          //fourth triangle 
 
-	glVertex3f(-0.2f, -0.2f, 0.0f);
+	//glColor3f(0.0f, 1.0f, 1.0f);
+	//glVertex3f(0.0f, 0.7f, 0.0f);
 
 
-	glVertex3f(0.2f, -0.2f, 0.0f);
+	//glVertex3f(-0.7f, -0.7f, 0.0f);
 
-	glVertex3f(0.0f, 0.2f, 0.0f);
 
-	glEnd();
+	//glVertex3f(0.7f, -0.7f, 0.0f);
 
-	glBegin(GL_LINE_STRIP);          //Tenth triangle 
+	//glVertex3f(0.0f, 0.7f, 0.0f);
 
-	glColor3f((128.0f / 255.0f), (0.0f / 255.0f), (128.0f / 255.0f));
-	glVertex3f(0.0f, 0.1f, 0.0f);
+	//glEnd();
 
+	//glBegin(GL_LINE_STRIP);          //fifth triangle 
 
-	glVertex3f(-0.1f, -0.1f, 0.0f);
+	//glColor3f(1.0f, 0.0f, 1.0f);
+	//glVertex3f(0.0f, 0.6f, 0.0f);
 
 
-	glVertex3f(0.1f, -0.1f, 0.0f);
+	//glVertex3f(-0.6f, -0.6f, 0.0f);
 
-	glVertex3f(0.0f, 0.1f, 0.0f);
 
-	glEnd();
+	//glVertex3f(0.6f, -0.6f, 0.0f);
+
+	//glVertex3f(0.0f, 0.6f, 0.0f);
+
+	//glEnd();
+
+	//glBegin(GL_LINE_STRIP);          //sixth triangle 
+
+	//glColor3f(1.0f, 1.0f, 0.0f);
+	//glVertex3f(0.0f, 0.5f, 0.0f);
+
+
+	//glVertex3f(-0.5f, -0.5f, 0.0f);
+
+
+	//glVertex3f(0.5f, -0.5f, 0.0f);
+
+	//glVertex3f(0.0f, 0.5f, 0.0f);
+
+	//glEnd();
+
+	//glBegin(GL_LINE_STRIP);          //seventh triangle 
+
+	//glColor3f(1.0f, 1.0f, 1.0f);
+	//glVertex3f(0.0f, 0.4f, 0.0f);
+
+
+	//glVertex3f(-0.4f, -0.4f, 0.0f);
+
+
+	//glVertex3f(0.4f, -0.4f, 0.0f);
+
+	//glVertex3f(0.0f, 0.4f, 0.0f);
+
+	//glEnd();
+
+	//glBegin(GL_LINE_STRIP);          //eighth triangle 
+
+	//glColor3f(1.0f, 0.49f, 0.0f);
+	//glVertex3f(0.0f, 0.3f, 0.0f);
+
+
+	//glVertex3f(-0.3f, -0.3f, 0.0f);
+
+
+	//glVertex3f(0.3f, -0.3f, 0.0f);
+
+	//glVertex3f(0.0f, 0.3f, 0.0f);
+
+	//glEnd();
+
+	//glBegin(GL_LINE_STRIP);          //ninth triangle 
+
+	//glColor3f((83.0f/255.0f), (83.0f/255.0f), (83.0f / 255.0f));
+	//glVertex3f(0.0f, 0.2f, 0.0f);
+
+
+	//glVertex3f(-0.2f, -0.2f, 0.0f);
+
+
+	//glVertex3f(0.2f, -0.2f, 0.0f);
+
+	//glVertex3f(0.0f, 0.2f, 0.0f);
+
+	//glEnd();
+
+	//glBegin(GL_LINE_STRIP);          //Tenth triangle 
+
+	//glColor3f((128.0f / 255.0f), (0.0f / 255.0f), (128.0f / 255.0f));
+	//glVertex3f(0.0f, 0.1f, 0.0f);
+
+
+	//glVertex3f(-0.1f, -0.1f, 0.0f);
+
+
+	//glVertex3f(0.1f, -0.1f, 0.0f);
+
+	//glVertex3f(0.0f, 0.1f, 0.0f);
+
+	//glEnd();
 
 	SwapBuffers(ghdc);
 
@@ -615,7 +812,7 @@ void uninitialize(void)
 	void ToggleFullScreen(void);
 
 	//code
-	
+
 	// if application is exiting in full screen
 
 	if (gbFullScreen == TRUE)
@@ -642,13 +839,13 @@ void uninitialize(void)
 
 
 	//Relese the HDC
-	
+
 	if (ghdc)
 	{
 		ReleaseDC(ghwnd, ghdc);
 		ghdc = NULL;
 	}
-	
+
 	// Distroy Window
 
 	if (ghwnd)
