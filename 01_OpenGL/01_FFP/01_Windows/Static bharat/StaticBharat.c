@@ -39,6 +39,10 @@ BOOL gbFullScreen = FALSE;
 HDC ghdc = NULL;
 HGLRC ghrc = NULL;
 
+//blending related variables
+
+GLfloat Opacity = 0.0f;
+
 //Entry point function
 
 int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpszCmdLine, int iCmdShow)
@@ -455,7 +459,11 @@ void display(void)
 
 void update(void)
 {
-	//code
+	if (Opacity <= 1.0f)
+	{
+		Opacity = Opacity + 0.0001;
+	}
+	
 
 }
 
@@ -1022,13 +1030,14 @@ void Letter_A2(void)
 void Letter_T(void)
 {
 	glPushMatrix();
-
+	glEnable(GL_BLEND);
+	glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
 	glScalef(0.3f, 0.249f, 0.0f);
 	glTranslatef(5.65f, -0.01f, 0.0f);
-	glColor3f(1.0f, 0.0f, 0.0f);
+	//glColor3f(1.0f, 0.0f, 0.0f);
 	glBegin(GL_QUADS);           //Horizontal quad
 
-	glColor3f((255.0f / 256.0f), (103.0f / 256.0f), (31.0f / 256.0f));
+	glColor4f((255.0f / 256.0f), (103.0f / 256.0f), (31.0f / 256.0f), Opacity);
 
 	glVertex3f(0.95f, 1.0f, 0.0f);
 	glVertex3f(-0.95f, 1.0f, 0.0f);
@@ -1038,19 +1047,19 @@ void Letter_T(void)
 
 	glBegin(GL_QUADS);           //Vertical quad upper
 
-	glColor3f((255.0f / 256.0f), (103.0f / 256.0f), (31.0f / 256.0f));
+	glColor4f((255.0f / 256.0f), (103.0f / 256.0f), (31.0f / 256.0f), Opacity);
 
 	glVertex3f(0.2f, 0.6f, 0.0f);
 	glVertex3f(-0.2f, 0.6f, 0.0f);
 
-	glColor3f((255.0f / 256.0f), (255.0f / 256.0f), (255.0f / 256.0f));
+	glColor4f((255.0f / 256.0f), (255.0f / 256.0f), (255.0f / 256.0f), Opacity);
 
 	glVertex3f(-0.2f, 0.2f, 0.0f);
 	glVertex3f(0.2f, 0.2f, 0.0f);
 	glEnd();
 
 	glBegin(GL_QUADS);
-	glColor3f((255.0f / 256.0f), (255.0f / 256.0f), (255.0f / 256.0f));
+	glColor4f((255.0f / 256.0f), (255.0f / 256.0f), (255.0f / 256.0f), Opacity);
 
 	glVertex3f(0.2f, 0.2f, 0.0f);
 	glVertex3f(-0.2f, 0.2f, 0.0f);
@@ -1059,17 +1068,17 @@ void Letter_T(void)
 	glEnd();
 	glBegin(GL_QUADS);           //Vertical quad bottom
 
-	glColor3f((255.0f / 256.0f), (255.0f / 256.0f), (255.0f / 256.0f));
+	glColor4f((255.0f / 256.0f), (255.0f / 256.0f), (255.0f / 256.0f), Opacity);
 
 	glVertex3f(0.2f, -0.22f, 0.0f);
 	glVertex3f(-0.2f, -0.22f, 0.0f);
 	
-	glColor3f((4.0f / 256.0f), (106.0f / 256.0f), (56.0f / 256.0f));
+	glColor4f((4.0f / 256.0f), (106.0f / 256.0f), (56.0f / 256.0f), Opacity);
 
 	glVertex3f(-0.2f, -1.0f, 0.0f);
 	glVertex3f(0.2f, -1.0f, 0.0f);
 	glEnd();
-
+	glDisable(GL_BLEND);
 	glPopMatrix();
 }
 void Letter_R(void)
