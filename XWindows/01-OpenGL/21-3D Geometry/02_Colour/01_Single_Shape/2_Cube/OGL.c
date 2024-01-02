@@ -60,6 +60,7 @@ int main(void)
                                   GLX_GREEN_SIZE,8,
                                   GLX_BLUE_SIZE,8,
                                   GLX_ALPHA_SIZE,8,
+                                  GLX_DEPTH_SIZE,24,
                                   None};
 
      
@@ -346,6 +347,13 @@ void initialize(void)
 
     glClearColor(0.0f,0.0f,0.0f,1.0f);
 
+    // 2nd change for depth or Enabling depth
+	glShadeModel(GL_SMOOTH); // (Its beautification line Not compulsory) jeva kheva color deu theva shade smooth thev
+	glClearDepth(1.0f); // Compulsory
+	glEnable(GL_DEPTH_TEST); // 8 test paike ek(depth) test enable kr
+	glDepthFunc(GL_LEQUAL); 
+	glHint(GL_PERSPECTIVE_CORRECTION_HINT, GL_NICEST); // optional for beautification
+
     //warmup resize
 
     resize(WIN_WIDTH,WIN_HEIGHT);
@@ -382,6 +390,7 @@ void draw(void)
 	glMatrixMode(GL_MODELVIEW);
 	glLoadIdentity();
 	
+    glDisable(GL_BLEND);
 	glTranslatef(0.0f, 0.0f, -5.0f);
 	glRotatef(C_Angle, 1.0f, 0.0f, 0.0f);              //when you use a single glRotatef() call and give (1.0) to every parameter OpenGL does arbitari axis rotation
 	glRotatef(C_Angle, 0.0f, 1.0f, 0.0f);              // when you use 
