@@ -60,6 +60,7 @@ int main(void)
                                   GLX_GREEN_SIZE,8,
                                   GLX_BLUE_SIZE,8,
                                   GLX_ALPHA_SIZE,8,
+                                  GLX_DEPTH_SIZE,24,
                                   None};
 
      
@@ -345,6 +346,13 @@ void initialize(void)
     //usual openGL code
 
     glClearColor(0.0f,0.0f,0.0f,1.0f);
+
+    // 2nd change for depth or Enabling depth
+	glShadeModel(GL_SMOOTH); // (Its beautification line Not compulsory) jeva kheva color deu theva shade smooth thev
+	glClearDepth(1.0f); // Compulsory
+	glEnable(GL_DEPTH_TEST); // 8 test paike ek(depth) test enable kr
+	glDepthFunc(GL_LEQUAL); 
+	glHint(GL_PERSPECTIVE_CORRECTION_HINT, GL_NICEST); // optional for beautification
 
     //warmup resize
 
