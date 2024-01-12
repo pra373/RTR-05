@@ -61,6 +61,9 @@ GLfloat angleForZRotation = 0.0f;
 
 GLuint keyPressed = 0;
 
+GLfloat WindowWidth;
+GLfloat WindowHeight;
+
 // Entry-Point Function
 int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpszCmdLine, int iCmdShow) 
 {
@@ -435,24 +438,18 @@ void resize(int width, int height)
 	if(height <= 0)
 		height = 1;
 
+	WindowHeight = height;
+	WindowWidth = width;
+
+
 	
 	glMatrixMode(GL_PROJECTION); 
 	glLoadIdentity();
 
 	glViewport(0, 0, (GLsizei)width, (GLsizei)height);
 
-	if (width <= height)
-	{
-		glOrtho(0.0f, 15.5f, 0.0f * ((GLfloat)height / (GLfloat)width), 15.5f * ((GLfloat)height / (GLfloat)width), -10.0f, 10.0f);
-	}
-
-	else
-	{
-		glOrtho(0.0f * ((GLfloat)width / (GLfloat)height), 15.5f * ((GLfloat)width / (GLfloat)height), 0.0f, 15.5f, -10.0f, 10.0f);
-
-	}
-
-	//gluPerspective(45.0f, ((GLfloat)width / (GLfloat)height), 0.1f, 100.0f);
+	
+	gluPerspective(45.0f, ((GLfloat)width / (GLfloat)height), 0.1f, 100.0f);
 
 
 }
@@ -470,7 +467,13 @@ void display(void)
 
 	GLfloat Shininess;
 
+	GLfloat horizontalDistance = WindowWidth / 6;
+	GLfloat verticalDistance = WindowHeight / 7;
+
 	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+
+	glViewport(0, (verticalDistance*5), (GLsizei)(WindowWidth/4), (GLsizei)(WindowHeight/4));
+
 	glMatrixMode(GL_MODELVIEW);
 	glLoadIdentity();
 
@@ -500,7 +503,10 @@ void display(void)
 	}
 
 	glLightfv(GL_LIGHT0, GL_POSITION, lightPosition);
+
+
 	//First Column precious stones
+	
 	//(emerald)
 
 	materialAmbient[0] = 0.0215;
@@ -530,7 +536,7 @@ void display(void)
 
 
 	glLoadIdentity();
-	glTranslatef(1.5f, 14.0f, 0.0f);
+	glTranslatef(0.0f, 0.0f, -5.0f);
 
 	gluSphere(quadric, 1.0f, 30, 30);  //draw sphere
 
@@ -564,7 +570,10 @@ void display(void)
 
 
 	glLoadIdentity();
-	glTranslatef(1.5f, 11.5f, 0.0f);
+
+	glViewport(0, (verticalDistance * 4), (GLsizei)(WindowWidth / 4), (GLsizei)(WindowHeight / 4));
+
+	glTranslatef(0.0f, 0.0, -5.0f);
 
 	gluSphere(quadric, 1.0f, 30, 30);  //draw sphere
 
@@ -599,7 +608,10 @@ void display(void)
 
 
 	glLoadIdentity();
-	glTranslatef(1.5f, 9.0f, 0.0f);
+
+	glViewport(0, (verticalDistance * 3), (GLsizei)(WindowWidth / 4), (GLsizei)(WindowHeight / 4));
+
+	glTranslatef(0.0f, 0.0f, -5.0f);
 
 	gluSphere(quadric, 1.0f, 30, 30);  //draw sphere
 
@@ -633,8 +645,12 @@ void display(void)
 
 
 	glLoadIdentity();
-	glTranslatef(1.5f, 6.5f, 0.0f);
 
+	glViewport(0, (verticalDistance * 2), (GLsizei)(WindowWidth / 4), (GLsizei)(WindowHeight / 4));
+
+	glTranslatef(0.0f, 0.0f, -5.0f);
+
+	
 	gluSphere(quadric, 1.0f, 30, 30);  //draw sphere
 
 	//first column fifth sphere
@@ -668,7 +684,12 @@ void display(void)
 
 
 	glLoadIdentity();
-	glTranslatef(1.5f, 4.0f, 0.0f);
+
+	glViewport(0, (verticalDistance), (GLsizei)(WindowWidth / 4), (GLsizei)(WindowHeight / 4));
+
+	glTranslatef(0.0f, 0.0f, -5.0f);
+
+	
 
 	gluSphere(quadric, 1.0f, 30, 30);  //draw sphere
 
@@ -703,7 +724,12 @@ void display(void)
 
 
 	glLoadIdentity();
-	glTranslatef(1.5f, 1.5f, 0.0f);
+
+	glViewport(0, 0, (GLsizei)(WindowWidth / 4), (GLsizei)(WindowHeight / 4));
+
+	glTranslatef(0.0f, 0.0f, -5.0f);
+
+
 
 	gluSphere(quadric, 1.0f, 30, 30);  //draw sphere
 
@@ -739,7 +765,11 @@ void display(void)
 
 
 	glLoadIdentity();
-	glTranslatef(7.5f, 14.0f, 0.0f);
+
+	glViewport((horizontalDistance), (verticalDistance * 5), (GLsizei)(WindowWidth / 4), (GLsizei)(WindowHeight / 4));
+
+	glTranslatef(0.0f, 0.0f, -5.0f);
+	
 
 	gluSphere(quadric, 1.0f, 30, 30);  //draw sphere
 
@@ -773,7 +803,12 @@ void display(void)
 
 
 	glLoadIdentity();
-	glTranslatef(7.5f, 11.5f, 0.0f);
+
+	glViewport((horizontalDistance), (verticalDistance * 4), (GLsizei)(WindowWidth / 4), (GLsizei)(WindowHeight / 4));
+
+	glTranslatef(0.0f, 0.0f, -5.0f);
+
+	
 
 	gluSphere(quadric, 1.0f, 30, 30);  //draw sphere
 
@@ -808,7 +843,11 @@ void display(void)
 
 
 	glLoadIdentity();
-	glTranslatef(7.5f, 9.0f, 0.0f);
+
+	glViewport((horizontalDistance), (verticalDistance * 3), (GLsizei)(WindowWidth / 4), (GLsizei)(WindowHeight / 4));
+
+	glTranslatef(0.0f, 0.0f, -5.0f);
+	
 
 	gluSphere(quadric, 1.0f, 30, 30);  //draw sphere
 
@@ -842,7 +881,11 @@ void display(void)
 
 
 	glLoadIdentity();
-	glTranslatef(7.5f, 6.5f, 0.0f);
+
+	glViewport((horizontalDistance), (verticalDistance * 2), (GLsizei)(WindowWidth / 4), (GLsizei)(WindowHeight / 4));
+
+	glTranslatef(0.0f, 0.0f, -5.0f);
+	
 
 	gluSphere(quadric, 1.0f, 30, 30);  //draw sphere
 
@@ -877,7 +920,10 @@ void display(void)
 
 
 	glLoadIdentity();
-	glTranslatef(7.5f, 4.0f, 0.0f);
+
+	glViewport((horizontalDistance), (verticalDistance), (GLsizei)(WindowWidth / 4), (GLsizei)(WindowHeight / 4));
+
+	glTranslatef(0.0f, 0.0f, -5.0f);
 
 	gluSphere(quadric, 1.0f, 30, 30);  //draw sphere
 
@@ -912,7 +958,11 @@ void display(void)
 
 
 	glLoadIdentity();
-	glTranslatef(7.5f, 1.5f, 0.0f);
+
+	glViewport((horizontalDistance), 0, (GLsizei)(WindowWidth / 4), (GLsizei)(WindowHeight / 4));
+
+	glTranslatef(0.0f, 0.0f, -5.0f);
+	
 
 	gluSphere(quadric, 1.0f, 30, 30);  //draw sphere
 	// ******************************* Second Column ends here ***************************
@@ -948,7 +998,11 @@ void display(void)
 
 
 	glLoadIdentity();
-	glTranslatef(13.5f, 14.0f, 0.0f);
+
+	glViewport((horizontalDistance*2), (verticalDistance*5), (GLsizei)(WindowWidth / 4), (GLsizei)(WindowHeight / 4));
+
+	glTranslatef(0.0f, 0.0f, -5.0f);
+	
 
 	gluSphere(quadric, 1.0f, 30, 30);  //draw sphere
 
@@ -983,7 +1037,11 @@ void display(void)
 
 
 	glLoadIdentity();
-	glTranslatef(13.5f, 11.5f, 0.0f);
+
+	glViewport((horizontalDistance * 2), (verticalDistance * 4), (GLsizei)(WindowWidth / 4), (GLsizei)(WindowHeight / 4));
+
+	glTranslatef(0.0f, 0.0f, -5.0f);
+	
 
 	gluSphere(quadric, 1.0f, 30, 30);  //draw sphere
 	
@@ -1017,7 +1075,11 @@ void display(void)
 
 
 	glLoadIdentity();
-	glTranslatef(13.5f, 9.0f, 0.0f);
+
+	glViewport((horizontalDistance * 2), (verticalDistance * 3), (GLsizei)(WindowWidth / 4), (GLsizei)(WindowHeight / 4));
+
+	glTranslatef(0.0f, 0.0f, -5.0f);
+	
 
 	gluSphere(quadric, 1.0f, 30, 30);  //draw sphere
 
@@ -1051,7 +1113,10 @@ void display(void)
 
 
 	glLoadIdentity();
-	glTranslatef(13.5f, 6.5f, 0.0f);
+
+	glViewport((horizontalDistance * 2), (verticalDistance * 2), (GLsizei)(WindowWidth / 4), (GLsizei)(WindowHeight / 4));
+
+	glTranslatef(0.0f, 0.0f, -5.0f);
 
 	gluSphere(quadric, 1.0f, 30, 30);  //draw sphere
 
@@ -1086,7 +1151,11 @@ void display(void)
 
 
 	glLoadIdentity();
-	glTranslatef(13.5f, 4.0f, 0.0f);
+
+	glViewport((horizontalDistance * 2), (verticalDistance ), (GLsizei)(WindowWidth / 4), (GLsizei)(WindowHeight / 4));
+
+	glTranslatef(0.0f, 0.0f, -5.0f);
+	
 
 	gluSphere(quadric, 1.0f, 30, 30);  //draw sphere
 
@@ -1121,7 +1190,10 @@ void display(void)
 
 
 	glLoadIdentity();
-	glTranslatef(13.5f, 1.5f, 0.0f);
+	
+	glViewport((horizontalDistance * 2), (0), (GLsizei)(WindowWidth / 4), (GLsizei)(WindowHeight / 4));
+
+	glTranslatef(0.0f, 0.0f, -5.0f);
 
 	gluSphere(quadric, 1.0f, 30, 30);  //draw sphere
 
@@ -1158,7 +1230,10 @@ void display(void)
 
 
 	glLoadIdentity();
-	glTranslatef(19.5f, 14.0f, 0.0f);
+
+	glViewport((horizontalDistance * 3), (verticalDistance*5), (GLsizei)(WindowWidth / 4), (GLsizei)(WindowHeight / 4));
+
+	glTranslatef(0.0f, 0.0f, -5.0f);
 
 	gluSphere(quadric, 1.0f, 30, 30);  //draw sphere
 
@@ -1193,7 +1268,11 @@ void display(void)
 
 
 	glLoadIdentity();
-	glTranslatef(19.5f, 11.5f, 0.0f);
+
+	glViewport((horizontalDistance * 3), (verticalDistance * 4), (GLsizei)(WindowWidth / 4), (GLsizei)(WindowHeight / 4));
+
+	glTranslatef(0.0f, 0.0f, -5.0f);
+	
 
 	gluSphere(quadric, 1.0f, 30, 30);  //draw sphere
 
@@ -1228,7 +1307,9 @@ void display(void)
 
 
 	glLoadIdentity();
-	glTranslatef(19.5f, 9.0f, 0.0f);
+	glViewport((horizontalDistance * 3), (verticalDistance * 3), (GLsizei)(WindowWidth / 4), (GLsizei)(WindowHeight / 4));
+
+	glTranslatef(0.0f, 0.0f, -5.0f);
 
 	gluSphere(quadric, 1.0f, 30, 30);  //draw sphere
 
@@ -1263,7 +1344,11 @@ void display(void)
 
 
 	glLoadIdentity();
-	glTranslatef(19.5f, 6.5f, 0.0f);
+
+	glViewport((horizontalDistance * 3), (verticalDistance * 2), (GLsizei)(WindowWidth / 4), (GLsizei)(WindowHeight / 4));
+
+	glTranslatef(0.0f, 0.0f, -5.0f);
+	
 
 	gluSphere(quadric, 1.0f, 30, 30);  //draw sphere
 
@@ -1298,7 +1383,11 @@ void display(void)
 
 
 	glLoadIdentity();
-	glTranslatef(19.5f, 4.0f, 0.0f);
+
+	glViewport((horizontalDistance * 3), (verticalDistance), (GLsizei)(WindowWidth / 4), (GLsizei)(WindowHeight / 4));
+
+	glTranslatef(0.0f, 0.0f, -5.0f);
+	
 
 	gluSphere(quadric, 1.0f, 30, 30);  //draw sphere
 
@@ -1334,7 +1423,11 @@ void display(void)
 
 
 	glLoadIdentity();
-	glTranslatef(19.5f, 1.5f, 0.0f);
+
+	glViewport((horizontalDistance * 3), (0), (GLsizei)(WindowWidth / 4), (GLsizei)(WindowHeight / 4));
+
+	glTranslatef(0.0f, 0.0f, -5.0f);
+	
 
 	gluSphere(quadric, 1.0f, 30, 30);  //draw sphere
 
@@ -1358,7 +1451,7 @@ void display(void)
 
 	//gluSphere(quadric, 0.2f, 50, 50);  //gluSphere call creates internally creates all needed normals for you
     
-	// 4th Change use z-axis coordinate
+	// 4th Change use z-axis coordinate*/
 	
 	
 	SwapBuffers(ghdc);
