@@ -1,0 +1,14 @@
+#include<windows.h>
+
+#include "OGLMain.h"
+
+MYICON ICON  MyIcon.ico
+
+MySound WAVE .\Assets\Audio\SBRS.wav
+
+
+//ID_MUSIC WAVE .\Assets\Audio\SavalaGaRamachandra.wav
+
+//IDBITMAP_TEXTURE_RAM_01 BITMAP .\Assets\Texture\Ram_01.bmp
+
+
