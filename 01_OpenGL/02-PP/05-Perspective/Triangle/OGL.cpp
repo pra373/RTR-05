@@ -598,8 +598,7 @@ int initialize(void)
 	 glBindBuffer(GL_ARRAY_BUFFER, 0);
 
 
-	 //step 17: Repete VBO position steps for VBO color
-	 //VBO for color
+	 
 
 	
 	 //step 18 : unbind with VAO
@@ -670,9 +669,7 @@ void display(void)
 
 	glUseProgram(shaderProgramObject);
 
-	//step 2: Bind with (VAO)
-
-	//conventionally transformations should be done before VAO binding
+	
 
 	//transformations
 
