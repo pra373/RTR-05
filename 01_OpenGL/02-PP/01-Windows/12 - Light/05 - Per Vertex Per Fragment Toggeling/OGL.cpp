@@ -5,6 +5,7 @@
 #include<stdlib.h>  //for exit()
 
 #include "OGL.h" // swatachi header file
+#include "Sphere.h"
 
 // OpenGL header Files
 #include<gl/glew.h>   //this must be before gl/gl.h header file
@@ -22,6 +23,7 @@ using namespace vmath;
 // Link With OpenGL Library
 #pragma comment(lib,"glew32.lib")
 #pragma comment(lib, "OpenGL32.lib")
+#pragma comment(lib,"Sphere.lib")
 //#pragma comment(lib, "glu32.lib") //file me OpenGL    //dont need in PP (There is no GLU utility in PP)
 
 // Global Function declarations
@@ -46,23 +48,37 @@ BOOL gbFullScreen = FALSE;
 GLuint shaderProgramObjectPerVertex = 0;
 GLuint shaderProgramObjectPerFragment = 0;
 
-GLfloat AnglePyramid = 0.0f;
+//GLfloat AnglePyramid = 0.0f;
+
+
+float sphere_vertices[1146];
+float sphere_normals[1146];
+float sphere_textures[764];
+unsigned short sphere_elements[2280];
+
+
+//GLfloat AngleCube = 0.0f;
+
+
+unsigned int gNumVertices = 0;
+unsigned int gNumElements = 0;
 
 
 enum
 {
 	AMC_ATTRIBUTE_POSITION = 0,
-	AMC_ATTRIBUTE_COLOR,
-	AMC_ATTRIBUTE_NORMAL
+	AMC_ATTRIBUTE_ELEMENT,
+	AMC_ATTRIBUTE_NORMAL,
+	AMC_ATTRIBUTE_COLOR
 };
 
+GLuint vaoSphere = 0;
+//GLuint vaoCube = 0;
 
-GLuint vaoPyramid = 0;
+GLuint vbo_Position_Sphere = 0;
+GLuint vbo_Normal_Sphere = 0;
+GLuint vbo_Element_Sphere = 0;
 
-GLuint vbo_Position_Pyramid = 0;
-
-
-GLuint vbo_Normal = 0;
 
 //GLuint uMVPMatrix;
 mat4 perspectiveProjectionMatrix;   //using 4*4 matrix.
@@ -1043,57 +1059,59 @@ int initialize(void)
 
 
 	
-	 // position
-	 GLfloat pyramidVertices[] =
-	 {
-		 // front
-		 0.0f,  1.0f,  0.0f, // front-top
-		-1.0f, -1.0f,  1.0f, // front-left
-		 1.0f, -1.0f,  1.0f, // front-right
+	 //// position
+	 //GLfloat pyramidVertices[] =
+	 //{
+		// // front
+		// 0.0f,  1.0f,  0.0f, // front-top
+		//-1.0f, -1.0f,  1.0f, // front-left
+		// 1.0f, -1.0f,  1.0f, // front-right
 
-		 // right
-		 0.0f,  1.0f,  0.0f, // right-top
-		 1.0f, -1.0f,  1.0f, // right-left
-		 1.0f, -1.0f, -1.0f, // right-right
+		// // right
+		// 0.0f,  1.0f,  0.0f, // right-top
+		// 1.0f, -1.0f,  1.0f, // right-left
+		// 1.0f, -1.0f, -1.0f, // right-right
 
-		 // back
-		 0.0f,  1.0f,  0.0f, // back-top
-		 1.0f, -1.0f, -1.0f, // back-left
-		-1.0f, -1.0f, -1.0f, // back-right
+		// // back
+		// 0.0f,  1.0f,  0.0f, // back-top
+		// 1.0f, -1.0f, -1.0f, // back-left
+		//-1.0f, -1.0f, -1.0f, // back-right
 
-		// left
-		0.0f,  1.0f,  0.0f, // left-top
-	   -1.0f, -1.0f, -1.0f, // left-left
-	   -1.0f, -1.0f,  1.0f, // left-right
-	 };
-
-
-	 // normals
-	 GLfloat pyramidNormals[] =
-	 {
-		 // front
-		 0.000000f, 0.447214f,  0.894427f, // front-top
-		 0.000000f, 0.447214f,  0.894427f, // front-left
-		 0.000000f, 0.447214f,  0.894427f, // front-right
-
-		 // right			    
-		 0.894427f, 0.447214f,  0.000000f, // right-top
-		 0.894427f, 0.447214f,  0.000000f, // right-left
-		 0.894427f, 0.447214f,  0.000000f, // right-right
-
-		 // back
-		 0.000000f, 0.447214f, -0.894427f, // back-top
-		 0.000000f, 0.447214f, -0.894427f, // back-left
-		 0.000000f, 0.447214f, -0.894427f, // back-right
-
-		 // left
-		-0.894427f, 0.447214f,  0.000000f, // left-top
-		-0.894427f, 0.447214f,  0.000000f, // left-left
-		-0.894427f, 0.447214f,  0.000000f, // left-right
-	 };
+		//// left
+		//0.0f,  1.0f,  0.0f, // left-top
+	 //  -1.0f, -1.0f, -1.0f, // left-left
+	 //  -1.0f, -1.0f,  1.0f, // left-right
+	 //};
 
 
+	 //// normals
+	 //GLfloat pyramidNormals[] =
+	 //{
+		// // front
+		// 0.000000f, 0.447214f,  0.894427f, // front-top
+		// 0.000000f, 0.447214f,  0.894427f, // front-left
+		// 0.000000f, 0.447214f,  0.894427f, // front-right
 
+		// // right			    
+		// 0.894427f, 0.447214f,  0.000000f, // right-top
+		// 0.894427f, 0.447214f,  0.000000f, // right-left
+		// 0.894427f, 0.447214f,  0.000000f, // right-right
+
+		// // back
+		// 0.000000f, 0.447214f, -0.894427f, // back-top
+		// 0.000000f, 0.447214f, -0.894427f, // back-left
+		// 0.000000f, 0.447214f, -0.894427f, // back-right
+
+		// // left
+		//-0.894427f, 0.447214f,  0.000000f, // left-top
+		//-0.894427f, 0.447214f,  0.000000f, // left-left
+		//-0.894427f, 0.447214f,  0.000000f, // left-right
+	 //};
+
+
+	 getSphereVertexData(sphere_vertices, sphere_normals, sphere_textures, sphere_elements);
+	 gNumVertices = getNumberOfSphereVertices();
+	 gNumElements = getNumberOfSphereElements();
 
 	 ////step 13: Create vertex array object
 	 //VAO
@@ -1101,25 +1119,18 @@ int initialize(void)
     //step 13: Create vertex array object
 	 //VAO
 
-	 // ********************************************** for Pyramid ***********************************************
+	 // ********************************************** for Sphere ***********************************************
 
-	 glGenVertexArrays(1, &vaoPyramid);
+	 ////step 13: Create vertex array object
 
-	 //step 14: Bind with VAO
+	// vao
+	 glGenVertexArrays(1, &vaoSphere);
+	 glBindVertexArray(vaoSphere);
 
-	 glBindVertexArray(vaoPyramid);
-
-	 //step 15: Create vertex buffer object (VBO) for position
-
-	 //VBO for position
-
-	 glGenBuffers(1, &vbo_Position_Pyramid);
-
-	 //step 16: Bind with VBO of position
-
-	 glBindBuffer(GL_ARRAY_BUFFER, vbo_Position_Pyramid);
-
-	 glBufferData(GL_ARRAY_BUFFER, sizeof(pyramidVertices), pyramidVertices, GL_STATIC_DRAW);
+	 // position vbo
+	 glGenBuffers(1, &vbo_Position_Sphere);
+	 glBindBuffer(GL_ARRAY_BUFFER, vbo_Position_Sphere);
+	 glBufferData(GL_ARRAY_BUFFER, sizeof(sphere_vertices), sphere_vertices, GL_STATIC_DRAW);
 
 	 glVertexAttribPointer(AMC_ATTRIBUTE_POSITION, 3, GL_FLOAT, GL_FALSE, 0, NULL);
 
@@ -1127,12 +1138,10 @@ int initialize(void)
 
 	 glBindBuffer(GL_ARRAY_BUFFER, 0);
 
-
-	 glGenBuffers(1, &vbo_Normal);
-
-	 glBindBuffer(GL_ARRAY_BUFFER, vbo_Normal);
-
-	 glBufferData(GL_ARRAY_BUFFER, sizeof(pyramidNormals), pyramidNormals, GL_STATIC_DRAW);
+	 // normal vbo
+	 glGenBuffers(1, &vbo_Normal_Sphere);
+	 glBindBuffer(GL_ARRAY_BUFFER, vbo_Normal_Sphere);
+	 glBufferData(GL_ARRAY_BUFFER, sizeof(sphere_normals), sphere_normals, GL_STATIC_DRAW);
 
 	 glVertexAttribPointer(AMC_ATTRIBUTE_NORMAL, 3, GL_FLOAT, GL_FALSE, 0, NULL);
 
@@ -1140,7 +1149,35 @@ int initialize(void)
 
 	 glBindBuffer(GL_ARRAY_BUFFER, 0);
 
-	 //step 18 : unbind with VAO
+
+	 //// VBO for Texcoord
+	 //glGenBuffers(1, &vbo_Texcoord);
+
+	 //glBindBuffer(GL_ARRAY_BUFFER, vbo_Texcoord);
+
+	 //glBufferData(GL_ARRAY_BUFFER, sizeof(sphere_texcoord), sphere_texcoord, GL_STATIC_DRAW);
+
+	 //glVertexAttribPointer(AMC_ATTRIBUTE_TEXCOORD, 2, GL_FLOAT, GL_FALSE, 0, NULL);
+
+	 //glEnableVertexAttribArray(AMC_ATTRIBUTE_TEXCOORD);
+
+	 //glBindBuffer(GL_ARRAY_BUFFER, 0);
+
+	 ////step 18 : unbind with VAO
+	 //glBindVertexArray(0);
+
+
+
+	 // element vbo
+	 glGenBuffers(1, &vbo_Element_Sphere);
+
+	 glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, vbo_Element_Sphere);
+
+	 glBufferData(GL_ELEMENT_ARRAY_BUFFER, sizeof(sphere_elements), sphere_elements, GL_STATIC_DRAW);
+
+	 glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, 0);
+
+	 // unbind vao
 	 glBindVertexArray(0);
 
 
@@ -1240,7 +1277,7 @@ void display(void)
 	
 
 
-	//Pyramid
+	//Sphere
 
 
      //transformations
@@ -1248,16 +1285,13 @@ void display(void)
 	mat4 modelViewMatrix = mat4::identity();
 	mat4 viewMatrix = mat4::identity();
 	mat4 translationMatrix = mat4::identity();
-	mat4 rotationMatrix = mat4::identity();
-
-	// Set up rotation matrix
-	rotationMatrix = vmath::rotate(AnglePyramid, 0.0f, 1.0f, 0.0f);
+	
 
 	// Set up translation matrix
-	translationMatrix = vmath::translate(0.0f, 0.0f, -4.0f);
+	translationMatrix = vmath::translate(0.0f, 0.0f, -2.0f);
 
 	// Combine translation and rotation
-	modelViewMatrix = translationMatrix * rotationMatrix;
+	modelViewMatrix = translationMatrix;
 
 	///push above mvp into vertex shader's mvp uniform
 
@@ -1438,15 +1472,15 @@ void display(void)
 	}*/
 
 
-	//step 2: Bind with (VAO)
+	// *** bind vao ***
+	glBindVertexArray(vaoSphere);
 
-	glBindVertexArray(vaoPyramid);
+	// *** draw, either by glDrawTriangles() or glDrawArrays() or glDrawElements()
+	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, vbo_Element_Sphere);
 
-	//step 3: Draw the geometry
+	glDrawElements(GL_TRIANGLES, gNumElements, GL_UNSIGNED_SHORT, 0); // 3rd parameter should be that 
 
-	glDrawArrays(GL_TRIANGLES, 0, 12);
-
-
+	
 	//step 4: unBind with (VAO)
 
 	glBindVertexArray(0);
@@ -1463,12 +1497,7 @@ void update(void)
 	//code
 	//only at time of change animation here code will come
 
-	AnglePyramid = AnglePyramid - 0.2f;
-
-	if (AnglePyramid <= 0.0f)
-	{
-		AnglePyramid = 360.0f;
-	}
+	
 }
 
 
@@ -1597,27 +1626,27 @@ void uninitialize(void)
 
 	
 	// delete vbo for normal
-	if (vbo_Normal)
+	if (vbo_Normal_Sphere)
 	{
-		glDeleteBuffers(1, &vbo_Normal);
-		vbo_Normal = 0;
+		glDeleteBuffers(1, &vbo_Normal_Sphere);
+		vbo_Normal_Sphere = 0;
 	}
 
 	//step 10 : delete vbo for position
-	if (vbo_Position_Pyramid)
+	if (vbo_Position_Sphere)
 	{
-		glDeleteBuffers(1, &vbo_Position_Pyramid);
-		vbo_Position_Pyramid = 0;
+		glDeleteBuffers(1, &vbo_Position_Sphere);
+		vbo_Position_Sphere = 0;
 	}
 
 
 
 	//step 11 : delete VAO 
 
-	if (vaoPyramid)
+	if (vaoSphere)
 	{
-		glDeleteVertexArrays(1, &vaoPyramid);
-		vaoPyramid = 0;
+		glDeleteVertexArrays(1, &vaoSphere);
+		vaoSphere = 0;
 	}
 
 	
