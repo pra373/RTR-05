@@ -1,6 +1,10 @@
+# Exclude specific file types
 *.obj
 *.exe
 .vscode
 *.res
 Log.txt
 *.o
+
+# Exclude files with no extension
+.*
