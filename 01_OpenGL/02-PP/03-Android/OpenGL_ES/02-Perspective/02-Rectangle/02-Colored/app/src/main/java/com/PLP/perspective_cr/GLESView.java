@@ -345,12 +345,12 @@ public class GLESView extends GLSurfaceView implements GLSurfaceView.Renderer, O
 
 		final float[] rectangleColor = new float[]
 		{
-			1.0f, 0.0f, 0.0f,
-			0.0f,1.0f,0.0f,
-			0.0f,0.0f,1.0f,
-			1.0f,1.0f,0.0f,
-			1.0f,0.0f,1.0f,
-			0.0f,1.0f,1.0f
+			0.0f, 0.0f, 1.0f,
+			0.0f, 0.0f, 1.0f,
+			0.0f, 0.0f, 1.0f,
+			0.0f, 0.0f, 1.0f,
+			0.0f, 0.0f, 1.0f,
+			0.0f, 0.0f, 1.0f
 		};
 
 		//vao
