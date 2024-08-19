@@ -613,7 +613,7 @@ int initialize(void)
 
 	 //index ( element buffer )
 
-	 //VBO for position
+	 //VBO for Index
 
 	 glGenBuffers(1, &vbo_Index);
 
@@ -818,6 +818,13 @@ void uninitialize(void)
 		glDeleteBuffers(1, &vbo_Position);
 		vbo_Position = 0;
 	}
+
+	if (vbo_Index)
+	{
+		glDeleteBuffers(1, &vbo_Index);
+		vbo_Index = 0;
+	}
+
 
 	//step 11 : delete VAO 
 
