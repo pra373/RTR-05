@@ -5,8 +5,6 @@
 #include<stdlib.h>  //for exit()
 
 #include "OGL.h" // swatachi header file
-#include "Sphere.h" // header for sphere
-
 
 // OpenGL header Files
 #include<gl/glew.h>   //this must be before gl/gl.h header file
@@ -17,9 +15,6 @@
 #include<fstream>
 #include<string>
 #include<sstream>
-
-
-
 
 using namespace vmath;
 using namespace std;
@@ -33,8 +28,6 @@ using namespace std;
 // Link With OpenGL Library
 #pragma comment(lib,"glew32.lib")
 #pragma comment(lib, "OpenGL32.lib")
-#pragma comment(lib,"Sphere.lib")  // for sphere
-
 
 //#pragma comment(lib, "glu32.lib") //file me OpenGL    //dont need in PP (There is no GLU utility in PP)
 
