@@ -1,0 +1,9 @@
+#include<windows.h>
+
+#include "OGL.h"
+
+MYICON ICON  MyIcon.ico
+MySound WAVE music3.wav
+
+
+
